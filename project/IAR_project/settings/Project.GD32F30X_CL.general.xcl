@@ -1,0 +1,15 @@
+"C:\IAR Systems\Embedded Workbench 8.2\arm\bin\armproc.dll" 
+
+"C:\IAR Systems\Embedded Workbench 8.2\arm\bin\armjlink2.dll" 
+
+"F:\gd32f303rx_sx1262_20230515\gd32f303rct6_LLCC68\project\IAR_project\GD32F30X_CL\Exe\Project.out" 
+
+--plugin="C:\IAR Systems\Embedded Workbench 8.2\arm\bin\armbat.dll" 
+
+--device_macro="C:\IAR Systems\Embedded Workbench 8.2\arm\config\debugger\GD\GD32F30x.dmac" 
+
+--flash_loader="C:\IAR Systems\Embedded Workbench 8.2\arm\config\flashloader\GD\FlashGD32F307xC.board" 
+
+
+
+
