@@ -1,3 +1,5 @@
+## 20230722 update list
+1. support CW mode to test rf performance
 ## 20230703 update list
 1. support the SW1179
 2. DIO2 as switch, DIO2=1 in TX mode, DIO2=0 in other mode

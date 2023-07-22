@@ -78,7 +78,8 @@
 
 #define USE_MODEM_LORA
 
-#define RF_FREQUENCY                                433000000 // Hz
+// #define RF_FREQUENCY                                433000000 // Hz
+#define RF_FREQUENCY                                915000000 // Hz
 
 #define TX_OUTPUT_POWER                             14        // dBm
 
@@ -209,6 +210,14 @@ int main( void )
 
     Radio.SetChannel( RF_FREQUENCY );
 
+    printf("the cw frequency is %d, the tx power is %d\n",RF_FREQUENCY,22);
+    Radio.SetTxContinuousWave(RF_FREQUENCY,22,0xffff);
+    while (1)
+    {
+        ;
+    }
+    
+
 #if defined( USE_MODEM_LORA )
 
     Radio.SetTxConfig( MODEM_LORA, TX_OUTPUT_POWER, 0, LORA_BANDWIDTH,
@@ -251,12 +260,13 @@ int main( void )
     Sw1179_To_Rx();
     PA30dbm_To_Rx();
 
-    Radio.Rx( RX_TIMEOUT_VALUE );
-    printf("start rx packet...\n");
-    State=LOWPOWER;
-    rtc_set_alarm(2048);
-    // State=TX;
-    // printf("start tx packet...\n");
+    // Radio.Rx( RX_TIMEOUT_VALUE );
+    // printf("start rx packet...\n");
+    // State=LOWPOWER;
+    // rtc_set_alarm(2048);
+
+    State=TX;
+    printf("start tx packet...\n");
 
     while( 1 )
     {
@@ -326,7 +336,8 @@ void OnTxDone( void )
     printf("transmit packet successfully\n");
     Radio.Sleep( );
     State = TX;
-    delay_1ms(1000);
+    // delay_1ms(500);
+    delay_1ms(200);
 }
 
 void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
