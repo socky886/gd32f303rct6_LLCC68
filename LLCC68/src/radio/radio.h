@@ -410,6 +410,7 @@ struct Radio_s
  */
 extern const struct Radio_s Radio;
 
+
 #ifdef __cplusplus
 }
 #endif

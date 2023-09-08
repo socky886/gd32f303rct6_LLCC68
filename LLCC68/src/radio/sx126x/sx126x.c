@@ -511,6 +511,7 @@ void SX126xSetRfFrequency( uint32_t frequency )
     buf[2] = ( uint8_t )( ( freqInPllSteps >> 8 ) & 0xFF );
     buf[3] = ( uint8_t )( freqInPllSteps & 0xFF );
     SX126xWriteCommand( RADIO_SET_RFFREQUENCY, buf, 4 );
+    printf("the frequency is %02x,%02x,%02x,%02x\n",buf[0],buf[1],buf[2],buf[3]);
 }
 
 void SX126xSetPacketType( RadioPacketTypes_t packetType )

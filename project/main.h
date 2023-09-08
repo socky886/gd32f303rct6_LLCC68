@@ -38,6 +38,17 @@ OF SUCH DAMAGE.
 #ifndef MAIN_H
 #define MAIN_H
 
+typedef enum
+{
+    LOWPOWER,
+    RX,
+    RX_TIMEOUT,
+    RX_ERROR,
+    TX,
+    TX_TIMEOUT,
+    S_CAD,
+}States_t;
+
 /* led spark function */
 void led_spark(void);
 

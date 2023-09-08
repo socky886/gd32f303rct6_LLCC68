@@ -573,10 +573,11 @@ ARM Macro Assembler    Page 9
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4 --apcs=interw
 ork --depend=.\output\startup_gd32f30x_hd.d -o.\output\startup_gd32f30x_hd.o -I
-C:\Keil_v5\ARM\RV31\INC -IC:\Keil_v5\ARM\CMSIS\Include -IC:\Keil_v5\ARM\INC\GD\
-GD32F30x --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA 52
-5" --list=.\list\startup_gd32f30x_hd.lst ..\..\Firmware\CMSIS\GD\GD32F30x\Sourc
-e\ARM\startup_gd32f30x_hd.s
+.\RTE\_GD32F30X_HD -IC:\Keil_v5\ARM\PACK\GigaDevice\GD32F30x_DFP\2.2.3\Device\I
+nclude -IC:\Keil_v5\ARM\CMSIS\Include --predefine="__MICROLIB SETA 1" --predefi
+ne="__UVISION_VERSION SETA 525" --predefine="GD32F30X_HD SETA 1" --list=.\list\
+startup_gd32f30x_hd.lst ..\..\Firmware\CMSIS\GD\GD32F30x\Source\ARM\startup_gd3
+2f30x_hd.s
 
 
 
@@ -1712,4 +1713,4 @@ d32f30x_hd.s
 d32f30x_hd.s
 Comment: __main used once
 2 symbols
-421 symbols in table
+422 symbols in table

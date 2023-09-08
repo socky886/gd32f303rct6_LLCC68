@@ -1,3 +1,7 @@
+## 20230908
+1. add CAD support
+2. add the 'weak' function
+3. simplify the main function
 ## 20230722 update list
 1. support CW mode to test rf performance
 ## 20230703 update list

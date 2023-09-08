@@ -31,6 +31,23 @@
 //#include "board.h"
 
 #include "gd32f303rct6_board.h"
+
+// private function declaration
+// weijunfeng added 2023/09/08
+void on_tx_done( void ) __attribute__( ( weak ) );
+void on_rx_done( void ) __attribute__( ( weak ) );
+void on_preamble_detected( void ) __attribute__( ( weak ) );
+void on_syncword_valid( void ) __attribute__( ( weak ) );
+void on_header_valid( ) __attribute__( ( weak ) );
+void on_header_error( void ) __attribute__( ( weak ) );
+void on_crc_error( void ) __attribute__( ( weak ) );
+void on_rx_timeout( void ) __attribute__( ( weak ) );
+void on_rx_error( void ) __attribute__( ( weak ) );
+void on_cad_done_undetected( void ) __attribute__( ( weak ) );
+void on_cad_done_detected( void ) __attribute__( ( weak ) );
+void on_fhss_hop_done( void ) __attribute__( ( weak ) );
+
+
 /*!
  * \brief Initializes the radio
  *
@@ -1155,7 +1172,8 @@ void RadioAddRegisterToRetentionList( uint16_t registerAddress )
 
 void RadioStartCad( void )
 {
-    SX126xSetDioIrqParams( IRQ_CAD_DONE | IRQ_CAD_ACTIVITY_DETECTED, IRQ_CAD_DONE | IRQ_CAD_ACTIVITY_DETECTED, IRQ_RADIO_NONE, IRQ_RADIO_NONE );
+    //SX126xSetDioIrqParams( IRQ_CAD_DONE | IRQ_CAD_ACTIVITY_DETECTED|IRQ_RX_DONE, IRQ_CAD_DONE | IRQ_CAD_ACTIVITY_DETECTED|IRQ_RX_DONE, IRQ_RADIO_NONE, IRQ_RADIO_NONE );
+    SX126xSetDioIrqParams( IRQ_RADIO_ALL, IRQ_RADIO_ALL, IRQ_RADIO_NONE, IRQ_RADIO_NONE );
     SX126xSetCad( );
 }
 
@@ -1258,6 +1276,7 @@ void RadioOnDioIrq( void* context )
     IrqFired = true;
 }
 
+
 void RadioIrqProcess( void )
 {
     //CRITICAL_SECTION_BEGIN( );
@@ -1326,6 +1345,7 @@ void RadioIrqProcess( void )
                 if( ( RadioEvents != NULL ) && ( RadioEvents->RxDone != NULL ) )
                 {
                     RadioEvents->RxDone( RadioRxPayload, size, RadioPktStatus.Params.LoRa.RssiPkt, RadioPktStatus.Params.LoRa.SnrPkt );
+                    on_rx_done();
                 }
             }
         }
@@ -1333,10 +1353,20 @@ void RadioIrqProcess( void )
         if( ( irqRegs & IRQ_CAD_DONE ) == IRQ_CAD_DONE )
         {
             //!< Update operating mode state to a value lower than \ref MODE_STDBY_XOSC
-            SX126xSetOperatingMode( MODE_STDBY_RC );
-            if( ( RadioEvents != NULL ) && ( RadioEvents->CadDone != NULL ) )
+            //SX126xSetOperatingMode( MODE_STDBY_RC );
+            // if( ( RadioEvents != NULL ) && ( RadioEvents->CadDone != NULL ) )
+            // {
+            //     RadioEvents->CadDone( ( ( irqRegs & IRQ_CAD_ACTIVITY_DETECTED ) == IRQ_CAD_ACTIVITY_DETECTED ) );
+            // }
+            if( ( irqRegs & IRQ_CAD_ACTIVITY_DETECTED ) == IRQ_CAD_ACTIVITY_DETECTED )
             {
-                RadioEvents->CadDone( ( ( irqRegs & IRQ_CAD_ACTIVITY_DETECTED ) == IRQ_CAD_ACTIVITY_DETECTED ) );
+                printf( "Channel activity detected\n" );
+                on_cad_done_detected( );
+            }
+            else
+            {
+                printf( "No channel activity detected\n" );
+                on_cad_done_undetected( );
             }
         }
 
@@ -1360,6 +1390,7 @@ void RadioIrqProcess( void )
                 if( ( RadioEvents != NULL ) && ( RadioEvents->RxTimeout != NULL ) )
                 {
                     RadioEvents->RxTimeout( );
+                    on_rx_timeout();
                 }
             }
         }
@@ -1367,16 +1398,25 @@ void RadioIrqProcess( void )
         if( ( irqRegs & IRQ_PREAMBLE_DETECTED ) == IRQ_PREAMBLE_DETECTED )
         {
             //__NOP( );
+            // if( ( RadioEvents != NULL ) && ( RadioEvents->CadDone != NULL ) )
+            // {
+            //     RadioEvents->CadDone( true );
+            // }
+            on_preamble_detected();
+
         }
 
         if( ( irqRegs & IRQ_SYNCWORD_VALID ) == IRQ_SYNCWORD_VALID )
         {
             //__NOP( );
+            on_syncword_valid();
+
         }
 
         if( ( irqRegs & IRQ_HEADER_VALID ) == IRQ_HEADER_VALID )
         {
             //__NOP( );
+            on_header_valid();
         }
 
         if( ( irqRegs & IRQ_HEADER_ERROR ) == IRQ_HEADER_ERROR )
@@ -1394,3 +1434,53 @@ void RadioIrqProcess( void )
         }
     }
 }
+
+// private function declaration 
+void on_tx_done( void )
+{
+    printf("TX Done\n");
+}
+void on_rx_done( void )
+{
+    printf("-----RX Done\n");
+}
+void on_preamble_detected( void )
+{
+    printf("valid preamble\n");
+} 
+void on_syncword_valid( void )
+{
+    printf("valid sync word\n");
+} 
+void on_header_valid( )
+{
+    printf("valid header\n");
+}
+void on_header_error( void )
+{
+
+} 
+void on_crc_error( void )
+{
+
+}
+void on_rx_timeout( void )
+{
+    printf("rx timeout\n");
+}
+void on_rx_error( void )
+{
+
+}
+void on_cad_done_undetected( void )
+{
+    printf("CAD activity undetected\n");
+}
+void on_cad_done_detected( void )
+{
+    printf("CAD activity detected\n");
+}
+void on_fhss_hop_done( void )
+{
+
+} 
