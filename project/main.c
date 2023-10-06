@@ -31,6 +31,7 @@
 #include "gd32f303rct6_board.h"
 #include <stdio.h>
 #include "main.h"
+#include "sx126x.h"
 // #include <string.h>
 
 // #if defined( REGION_AS923 )
@@ -80,8 +81,10 @@
 #define USE_MODEM_LORA
 
 //#define RF_FREQUENCY                                433000000 // Hz
-#define RF_FREQUENCY                                915000000 // Hz
+// #define RF_FREQUENCY                                915000000 // Hz
 //#define RF_FREQUENCY                                868000000 // Hz
+//#define RF_FREQUENCY                                868000999 // Hz
+#define RF_FREQUENCY                                868000999 // Hz
 
 #define TX_OUTPUT_POWER                             22        // dBm
 
@@ -121,15 +124,16 @@
                                                               //  1: 250 kHz,
                                                               //  2: 500 kHz,
                                                               //  3: Reserved]
-#define LORA_SPREADING_FACTOR                       7         // [SF7..SF12]
-#define LORA_CODINGRATE                             1         // [1: 4/5,
+#define LORA_SPREADING_FACTOR                      9         // [SF7..SF12]
+#define LORA_CODINGRATE                            2         // [1: 4/5,
                                                               //  2: 4/6,
                                                               //  3: 4/7,
                                                               //  4: 4/8]
 #define LORA_PREAMBLE_LENGTH                        8         // Same for Tx and Rx
+//#define LORA_PREAMBLE_LENGTH                        84         // Same for Tx and Rx
 #define LORA_SYMBOL_TIMEOUT                         0         // Symbols
-#define LORA_FIX_LENGTH_PAYLOAD_ON                  false
-#define LORA_IQ_INVERSION_ON                        false
+#define LORA_FIX_LENGTH_PAYLOAD_ON                  true
+#define LORA_IQ_INVERSION_ON                        true
 
 
 #elif defined( USE_MODEM_FSK )
@@ -217,7 +221,7 @@ int main( void )
     soft_spi_init();
     //rtc_configuration();
 
-
+    printf("===================weijunfeng 20231002===================\n");
     SX126xReset();
     register_test();
     
@@ -231,7 +235,7 @@ int main( void )
     RadioEvents.CadDone=OnCadDone;
 
     Radio.Init( &RadioEvents );
-
+    // set frequency
     Radio.SetChannel( RF_FREQUENCY );
 
     
@@ -239,7 +243,7 @@ int main( void )
 
 #if defined( USE_MODEM_LORA )
 
-    Radio.SetTxConfig( MODEM_LORA, TX_OUTPUT_POWER, 0, LORA_BANDWIDTH,
+    Radio.SetTxConfig_meter( MODEM_LORA, TX_OUTPUT_POWER, 0, LORA_BANDWIDTH,
                                    LORA_SPREADING_FACTOR, LORA_CODINGRATE,
                                    LORA_PREAMBLE_LENGTH, LORA_FIX_LENGTH_PAYLOAD_ON,
                                    true, 0, 0, LORA_IQ_INVERSION_ON, 3000 );
@@ -249,12 +253,22 @@ int main( void )
     //                                LORA_SYMBOL_TIMEOUT, LORA_FIX_LENGTH_PAYLOAD_ON,
     //                                0, true, 0, 0, LORA_IQ_INVERSION_ON, true );
 
-     Radio.SetRxConfig( MODEM_LORA, LORA_BANDWIDTH, LORA_SPREADING_FACTOR,
+    SX126xSetLoRaSymbNumTimeout( 0x00 );
+    
+    SX126xIoRfSwitchInit();
+    Radio_Set_Private_Network();
+    SX126xSetRxTxFallbackMode(0x40);
+    
+    SX126xSetStopRxTimerOnPreambleDetect( false );
+    Radio.Sleep();
+    SX126xSetStandby(STDBY_XOSC);
+
+    Radio.SetRxConfig_meter( MODEM_LORA, LORA_BANDWIDTH, LORA_SPREADING_FACTOR,
                                    LORA_CODINGRATE, 0, LORA_PREAMBLE_LENGTH,
                                    LORA_SYMBOL_TIMEOUT, LORA_FIX_LENGTH_PAYLOAD_ON,
-                                   0, true, 0, 0, LORA_IQ_INVERSION_ON, false );
+                                   10, true, 0, 0, LORA_IQ_INVERSION_ON, false );
 
-    Radio.SetMaxPayloadLength( MODEM_LORA, BUFFER_SIZE );
+    //Radio.SetMaxPayloadLength( MODEM_LORA, BUFFER_SIZE );
 
 #elif defined( USE_MODEM_FSK )
 
@@ -288,8 +302,10 @@ int main( void )
     // printf("set Cad parameters and enter CAD mode\n");
     // //SX126xSetCadParams(0x00,0x19,0x0a,0x00,0x4720);
     //State=LOWPOWER;
-    SX126xSetCadParams(0x00,0x19,0x0a,0x01,64000);
-    Radio.StartCad();
+
+
+    // SX126xSetCadParams(0x00,0x19,0x0a,0x01,64000);
+    // Radio.StartCad();
     
 
     // Radio.Rx( RX_TIMEOUT_VALUE );
@@ -297,17 +313,17 @@ int main( void )
     // State=LOWPOWER;
     // rtc_set_alarm(2048);
 
-    // State=TX;
-    // printf("start tx packet...\n");
-    // Sw1179_To_Tx();
-    // PA30dbm_To_Tx();
-    // for ( i = 0; i < 48; i++)
-    // {
-    //     Buffer[i]='A'+i;
-    // }
-    // BufferSize=7;
-    // DelayMs( 1 );
-    // Radio.Send( Buffer, BufferSize );
+    State=TX;
+    printf("start tx packet...\n");
+    Sw1179_To_Tx();
+    PA30dbm_To_Tx();
+    for ( i = 0; i < 48; i++)
+    {
+        Buffer[i]='A'+i;
+    }
+    BufferSize=10;
+    DelayMs( 1 );
+    Radio.Send( Buffer, BufferSize );
 
     // Sw1179_To_Tx();
     // PA30dbm_To_Tx();
@@ -352,7 +368,7 @@ void OnTxDone( void )
     // if(nChangeChannel==2)
     //   nChangeChannel=0;
     
-    delay_1ms(200);
+    delay_1ms(5);
 
     Sw1179_To_Tx();
     PA30dbm_To_Tx();
@@ -360,7 +376,7 @@ void OnTxDone( void )
     {
         Buffer[i]='A'+i;
     }
-    BufferSize=7;
+    BufferSize=10;
     DelayMs( 1 );
     Radio.Send( Buffer, BufferSize );
     

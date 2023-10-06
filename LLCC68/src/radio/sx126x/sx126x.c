@@ -418,7 +418,8 @@ void SX126xCalibrateImage( uint32_t freq )
     else if( freq > 850000000 )
     {
         calFreq[0] = 0xD7;
-        calFreq[1] = 0xDB;
+        //calFreq[1] = 0xDB;
+        calFreq[1] = 0xD8;
     }
     else if( freq > 770000000 )
     {
@@ -530,32 +531,33 @@ void SX126xSetTxParams( int8_t power, RadioRampTimes_t rampTime )
 {
     uint8_t buf[2];
 
-    if( SX126xGetDeviceId( ) == SX1261 )
-    {
-        if( power == 15 )
-        {
-            SX126xSetPaConfig( 0x06, 0x00, 0x01, 0x01 );
-        }
-        else
-        {
-            SX126xSetPaConfig( 0x04, 0x00, 0x01, 0x01 );
-        }
-        if( power >= 14 )
-        {
-            power = 14;
-        }
-        else if( power < -17 )
-        {
-            power = -17;
-        }
-    }
-    else // sx1262
+    // if( SX126xGetDeviceId( ) == SX1261 )
+    // {
+    //     if( power == 15 )
+    //     {
+    //         SX126xSetPaConfig( 0x06, 0x00, 0x01, 0x01 );
+    //     }
+    //     else
+    //     {
+    //         SX126xSetPaConfig( 0x04, 0x00, 0x01, 0x01 );
+    //     }
+    //     if( power >= 14 )
+    //     {
+    //         power = 14;
+    //     }
+    //     else if( power < -17 )
+    //     {
+    //         power = -17;
+    //     }
+    // }
+    // else // sx1262
     {
         // WORKAROUND - Better Resistance of the SX1262 Tx to Antenna Mismatch, see DS_SX1261-2_V1.2 datasheet chapter 15.2
         SX126xWriteRegister( REG_TX_CLAMP_CFG, SX126xReadRegister( REG_TX_CLAMP_CFG ) | ( 0x0F << 1 ) );
         // WORKAROUND END
 
-        SX126xSetPaConfig( 0x04, 0x07, 0x00, 0x01 );
+        //SX126xSetPaConfig( 0x04, 0x07, 0x00, 0x01 );
+        SX126xSetPaConfig( 0x03, 0x05, 0x00, 0x01 );
         if( power > 22 )
         {
             power = 22;
@@ -565,6 +567,9 @@ void SX126xSetTxParams( int8_t power, RadioRampTimes_t rampTime )
             power = -9;
         }
     }
+    // set the OCP to 0x38, the max current is 140ma
+    SX126xWriteRegister(REG_OCP,0x38);
+    // set the power and pa ramp time
     buf[0] = power;
     buf[1] = ( uint8_t )rampTime;
     SX126xWriteCommand( RADIO_SET_TXPARAMS, buf, 2 );

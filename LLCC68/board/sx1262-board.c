@@ -185,6 +185,12 @@ void SX126xWakeup( void )
 
 void SX126xWriteCommand( RadioCommands_t command, uint8_t *buffer, uint16_t size )
 {
+    printf("write command:%02x ", command);
+    for (uint16_t i = 0; i < size; i++)
+    {
+            printf("%02x ", buffer[i]);
+    }
+    printf("\n");
     SX126xCheckDeviceReady( );
 
     GpioWrite( &SX126x.Spi.Nss, 0 );
@@ -223,11 +229,24 @@ uint8_t SX126xReadCommand( RadioCommands_t command, uint8_t *buffer, uint16_t si
 
     SX126xWaitOnBusy( );
 
+    printf("read command:%02x ,00 ", command);
+    for (uint16_t i = 0; i < size; i++)
+    {
+            printf("%02x ", buffer[i]);
+    }
+    printf("\n");
     return status;
 }
 
 void SX126xWriteRegisters( uint16_t address, uint8_t *buffer, uint16_t size )
 {
+    printf("write register :%02x %02x %02x ", RADIO_WRITE_REGISTER,( address & 0xFF00 ) >> 8,address & 0x00FF);
+    for (uint16_t i = 0; i < size; i++)
+    {
+            printf("%02x ", buffer[i]);
+    }
+    printf("\n");
+
     SX126xCheckDeviceReady( );
 
     GpioWrite( &SX126x.Spi.Nss, 0 );
@@ -244,6 +263,7 @@ void SX126xWriteRegisters( uint16_t address, uint8_t *buffer, uint16_t size )
     GpioWrite( &SX126x.Spi.Nss, 1 );
 
     SX126xWaitOnBusy( );
+
 }
 
 void SX126xWriteRegister( uint16_t address, uint8_t value )
@@ -268,6 +288,14 @@ void SX126xReadRegisters( uint16_t address, uint8_t *buffer, uint16_t size )
     GpioWrite( &SX126x.Spi.Nss, 1 );
 
     SX126xWaitOnBusy( );
+
+    printf("read register :%02x %02x %02x 00", RADIO_READ_REGISTER,( address & 0xFF00 ) >> 8,address & 0x00FF);
+    for (uint16_t i = 0; i < size; i++)
+    {
+            printf("%02x ", buffer[i]);
+    }
+    printf("\n");
+
 }
 
 uint8_t SX126xReadRegister( uint16_t address )
@@ -279,6 +307,13 @@ uint8_t SX126xReadRegister( uint16_t address )
 
 void SX126xWriteBuffer( uint8_t offset, uint8_t *buffer, uint8_t size )
 {
+    printf("write buffer :%02x %02x ", RADIO_WRITE_BUFFER,offset);
+    for (uint16_t i = 0; i < size; i++)
+    {
+            printf("%02x ", buffer[i]);
+    }
+    printf("\n");
+
     SX126xCheckDeviceReady( );
 
     GpioWrite( &SX126x.Spi.Nss, 0 );
@@ -310,11 +345,19 @@ void SX126xReadBuffer( uint8_t offset, uint8_t *buffer, uint8_t size )
     GpioWrite( &SX126x.Spi.Nss, 1 );
 
     SX126xWaitOnBusy( );
+
+    printf("read buffer :%02x %02x 00", RADIO_READ_BUFFER,offset);
+    for (uint16_t i = 0; i < size; i++)
+    {
+            printf("%02x ", buffer[i]);
+    }
+    printf("\n");
 }
 
 void SX126xSetRfTxPower( int8_t power )
 {
-    SX126xSetTxParams( power, RADIO_RAMP_40_US );
+    //SX126xSetTxParams( power, RADIO_RAMP_40_US );
+    SX126xSetTxParams( power, RADIO_RAMP_10_US );
 }
 
 uint8_t SX126xGetDeviceId( void )

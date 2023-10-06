@@ -1,3 +1,5 @@
+## 20231006
+1. can communication with ningbo water meter
 ## 20230908
 1. add CAD support
 2. add the 'weak' function

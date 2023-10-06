@@ -247,6 +247,20 @@ struct Radio_s
                               uint8_t coderate, uint16_t preambleLen,
                               bool fixLen, bool crcOn, bool freqHopOn,
                               uint8_t hopPeriod, bool iqInverted, uint32_t timeout );
+
+    void    ( *SetRxConfig_meter )( RadioModems_t modem, uint32_t bandwidth,
+                              uint32_t datarate, uint8_t coderate,
+                              uint32_t bandwidthAfc, uint16_t preambleLen,
+                              uint16_t symbTimeout, bool fixLen,
+                              uint8_t payloadLen,
+                              bool crcOn, bool freqHopOn, uint8_t hopPeriod,
+                              bool iqInverted, bool rxContinuous );
+
+    void    ( *SetTxConfig_meter )( RadioModems_t modem, int8_t power, uint32_t fdev,
+                              uint32_t bandwidth, uint32_t datarate,
+                              uint8_t coderate, uint16_t preambleLen,
+                              bool fixLen, bool crcOn, bool freqHopOn,
+                              uint8_t hopPeriod, bool iqInverted, uint32_t timeout );
     /*!
      * \brief Checks if the given RF frequency is supported by the hardware
      *
@@ -410,7 +424,7 @@ struct Radio_s
  */
 extern const struct Radio_s Radio;
 
-
+void Radio_Set_Private_Network(void);
 #ifdef __cplusplus
 }
 #endif
