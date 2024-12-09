@@ -34,6 +34,8 @@
 #include "gd32f303rct6_board.h"
 #include "gd32f303rct6_delay.h"
 
+//#define SPI_PRINT_ENABLE 
+
 #if defined( USE_RADIO_DEBUG )
 /*!
  * \brief Writes new Tx debug pin state
@@ -60,6 +62,7 @@ static RadioOperatingModes_t OperatingMode;
  */
 Gpio_t AntPow;
 Gpio_t DeviceSel;
+
 
 /*!
  * Debug GPIO pins objects
@@ -186,12 +189,15 @@ void SX126xWakeup( void )
 
 void SX126xWriteCommand( RadioCommands_t command, uint8_t *buffer, uint16_t size )
 {
+#if defined(SPI_PRINT_ENABLE)    
     printf("write command:%02x ", command);
     for (uint16_t i = 0; i < size; i++)
     {
             printf("%02x ", buffer[i]);
     }
     printf("\n");
+#endif
+    
     SX126xCheckDeviceReady( );
 
     GpioWrite( &SX126x.Spi.Nss, 0 );
@@ -230,23 +236,28 @@ uint8_t SX126xReadCommand( RadioCommands_t command, uint8_t *buffer, uint16_t si
 
     SX126xWaitOnBusy( );
 
+#if defined(SPI_PRINT_ENABLE)
+
     printf("read command:%02x ,00 ", command);
     for (uint16_t i = 0; i < size; i++)
     {
             printf("%02x ", buffer[i]);
     }
     printf("\n");
+#endif
     return status;
 }
 
 void SX126xWriteRegisters( uint16_t address, uint8_t *buffer, uint16_t size )
 {
-    printf("write register :%02x %02x %02x ", RADIO_WRITE_REGISTER,( address & 0xFF00 ) >> 8,address & 0x00FF);
+#if defined(SPI_PRINT_ENABLE)
+    printf("write register :%02x %02x %02x ", RADIO_WRITE_REGISTER, (address & 0xFF00) >> 8, address & 0x00FF);
     for (uint16_t i = 0; i < size; i++)
     {
-            printf("%02x ", buffer[i]);
+        printf("%02x ", buffer[i]);
     }
     printf("\n");
+#endif
 
     SX126xCheckDeviceReady( );
 
@@ -290,12 +301,14 @@ void SX126xReadRegisters( uint16_t address, uint8_t *buffer, uint16_t size )
 
     SX126xWaitOnBusy( );
 
+#if defined(SPI_PRINT_ENABLE)
     printf("read register :%02x %02x %02x 00", RADIO_READ_REGISTER,( address & 0xFF00 ) >> 8,address & 0x00FF);
     for (uint16_t i = 0; i < size; i++)
     {
             printf("%02x ", buffer[i]);
     }
     printf("\n");
+#endif
 
 }
 
@@ -308,12 +321,14 @@ uint8_t SX126xReadRegister( uint16_t address )
 
 void SX126xWriteBuffer( uint8_t offset, uint8_t *buffer, uint8_t size )
 {
+#if defined(SPI_PRINT_ENABLE)
     printf("write buffer :%02x %02x ", RADIO_WRITE_BUFFER,offset);
     for (uint16_t i = 0; i < size; i++)
     {
             printf("%02x ", buffer[i]);
     }
     printf("\n");
+#endif
 
     SX126xCheckDeviceReady( );
 
@@ -346,13 +361,14 @@ void SX126xReadBuffer( uint8_t offset, uint8_t *buffer, uint8_t size )
     GpioWrite( &SX126x.Spi.Nss, 1 );
 
     SX126xWaitOnBusy( );
-
+#if defined(SPI_PRINT_ENABLE)
     printf("read buffer :%02x %02x 00", RADIO_READ_BUFFER,offset);
     for (uint16_t i = 0; i < size; i++)
     {
             printf("%02x ", buffer[i]);
     }
     printf("\n");
+#endif
 }
 
 void SX126xSetRfTxPower( int8_t power )

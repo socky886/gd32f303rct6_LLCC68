@@ -310,22 +310,22 @@ int main( void )
     // Radio.StartCad();
     
 
-    // Radio.Rx( RX_TIMEOUT_VALUE );
-    // printf("start rx packet...\n");
-    // State=LOWPOWER;
+    Radio.Rx( RX_TIMEOUT_VALUE );
+    printf("start rx packet...\n");
+    State=LOWPOWER;
     // rtc_set_alarm(2048);
 
-    State=TX;
-    printf("start tx packet...\n");
-    Sw1179_To_Tx();
-    PA30dbm_To_Tx();
-    for ( i = 0; i < 48; i++)
-    {
-        Buffer[i]='A'+i;
-    }
-    BufferSize=10;
-    DelayMs( 1 );
-    Radio.Send( Buffer, BufferSize );
+    // State=TX;
+    // printf("start tx packet...\n");
+    // Sw1179_To_Tx();
+    // PA30dbm_To_Tx();
+    // for ( i = 0; i < 48; i++)
+    // {
+    //     Buffer[i]='A'+i;
+    // }
+    // BufferSize=10;
+    // DelayMs( 1 );
+    // Radio.Send( Buffer, BufferSize );
 
     // Sw1179_To_Tx();
     // PA30dbm_To_Tx();
@@ -396,7 +396,7 @@ void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
     RssiValue = rssi;
     SnrValue = snr;
     //State = RX;
-    printf("receive packet successfully\n");
+    printf("-----------receive packet successfully\n");
     printf("RSSI=%d,SNR=%d  ",RssiValue,SnrValue);
     for (i = 0; i < BufferSize; i++)
     {
@@ -404,10 +404,10 @@ void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
     }
     printf("\n");
 
-    delay_1ms(900);
-    Radio.StartCad();
+    // delay_1ms(900);
+    // Radio.StartCad();
     
-    //Radio.Rx( RX_TIMEOUT_VALUE );
+    Radio.Rx( RX_TIMEOUT_VALUE );
 
     //rtc_reset_alarm();
     //State=S_CAD;
