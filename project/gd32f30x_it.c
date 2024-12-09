@@ -38,6 +38,7 @@ OF SUCH DAMAGE.
 #include "gd32f30x_it.h"
 #include "main.h"
 #include "systick.h"
+#include <stdio.h>
 
 extern States_t State;
 /*!

@@ -1,6 +1,10 @@
+#include <stdio.h>
 #include "gd32f303rct6_board.h"
 #include "gd32f303rct6_gpio.h"
 #include "gd32f303rct6_spi.h"
+#include "gd32f303rct6_delay.h"
+#include "systick.h"
+
 
 Gpio_t sw1179_pin={
     .pinIndex=ANT_SW,

@@ -24,6 +24,7 @@
  * \author    Gregory Cristian ( Semtech )
  */
 #include <stdlib.h>
+#include <stdio.h>
 //#include "utilities.h"
 // #include "board-config.h"
 //#include "board.h"
@@ -31,7 +32,7 @@
 #include "radio.h"
 #include "sx126x-board.h"
 #include "gd32f303rct6_board.h"
-
+#include "gd32f303rct6_delay.h"
 
 #if defined( USE_RADIO_DEBUG )
 /*!

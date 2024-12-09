@@ -22,6 +22,7 @@
  */
 #include <math.h>
 #include <string.h>
+#include <stdio.h>
 //#include "utilities.h"
 // #include "timer.h"
 // #include "delay.h"
@@ -31,6 +32,7 @@
 //#include "board.h"
 
 #include "gd32f303rct6_board.h"
+#include "gd32f303rct6_delay.h"
 
 // private function declaration
 // weijunfeng added 2023/09/08

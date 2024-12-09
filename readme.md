@@ -1,3 +1,7 @@
+## 20241209
+1. support keil V5.38
+2. the compiler version is V6.19
+3. work normal by test
 ## 20231006
 1. can communication with ningbo water meter
 ## 20230908

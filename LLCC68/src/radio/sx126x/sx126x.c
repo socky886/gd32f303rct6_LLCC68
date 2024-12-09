@@ -21,6 +21,7 @@
  * \author    Gregory Cristian ( Semtech )
  */
 #include <string.h>
+#include <stdio.h>
 //#include "utilities.h"
 //#include "timer.h"
 #include "radio.h"

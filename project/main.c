@@ -32,6 +32,8 @@
 #include <stdio.h>
 #include "main.h"
 #include "sx126x.h"
+#include "sx126x-board.h"
+#include "gd32f303rct6_delay.h"
 // #include <string.h>
 
 // #if defined( REGION_AS923 )
