@@ -1,3 +1,7 @@
+## 2025/03/06 09:40
+1. the config is sf7,125k,4/5, 470000000, tx_power=8, variable packet, IQ invert is false
+2. the RX interrupt mask is only RX_DONE
+3. the project work normal with GD32F303
 ## 20241209
 1. support keil V5.38
 2. the compiler version is V6.19

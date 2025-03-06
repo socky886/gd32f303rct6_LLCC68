@@ -86,9 +86,10 @@
 // #define RF_FREQUENCY                                915000000 // Hz
 //#define RF_FREQUENCY                                868000000 // Hz
 //#define RF_FREQUENCY                                868000999 // Hz
-#define RF_FREQUENCY                                868000999 // Hz
+// #define RF_FREQUENCY                                868000999 // Hz
+#define RF_FREQUENCY                                470000000 // Hz
 
-#define TX_OUTPUT_POWER                             22        // dBm
+#define TX_OUTPUT_POWER                             8        // dBm
 
 #if defined( USE_MODEM_LORA )
 
@@ -126,16 +127,16 @@
                                                               //  1: 250 kHz,
                                                               //  2: 500 kHz,
                                                               //  3: Reserved]
-#define LORA_SPREADING_FACTOR                      9         // [SF7..SF12]
-#define LORA_CODINGRATE                            2         // [1: 4/5,
+#define LORA_SPREADING_FACTOR                      7         // [SF7..SF12]
+#define LORA_CODINGRATE                            1         // [1: 4/5,
                                                               //  2: 4/6,
                                                               //  3: 4/7,
                                                               //  4: 4/8]
 #define LORA_PREAMBLE_LENGTH                        8         // Same for Tx and Rx
 //#define LORA_PREAMBLE_LENGTH                        84         // Same for Tx and Rx
 #define LORA_SYMBOL_TIMEOUT                         0         // Symbols
-#define LORA_FIX_LENGTH_PAYLOAD_ON                  true
-#define LORA_IQ_INVERSION_ON                        true
+#define LORA_FIX_LENGTH_PAYLOAD_ON                  false
+#define LORA_IQ_INVERSION_ON                        false
 
 
 #elif defined( USE_MODEM_FSK )
@@ -268,7 +269,7 @@ int main( void )
     Radio.SetRxConfig_meter( MODEM_LORA, LORA_BANDWIDTH, LORA_SPREADING_FACTOR,
                                    LORA_CODINGRATE, 0, LORA_PREAMBLE_LENGTH,
                                    LORA_SYMBOL_TIMEOUT, LORA_FIX_LENGTH_PAYLOAD_ON,
-                                   10, true, 0, 0, LORA_IQ_INVERSION_ON, false );
+                                   0, true, 0, 0, LORA_IQ_INVERSION_ON, false );
 
     //Radio.SetMaxPayloadLength( MODEM_LORA, BUFFER_SIZE );
 
@@ -313,6 +314,8 @@ int main( void )
     Radio.Rx( RX_TIMEOUT_VALUE );
     printf("start rx packet...\n");
     State=LOWPOWER;
+
+
     // rtc_set_alarm(2048);
 
     // State=TX;

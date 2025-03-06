@@ -1293,10 +1293,15 @@ void RadioStandby( void )
 
 void RadioRx( uint32_t timeout )
 {
-    SX126xSetDioIrqParams( IRQ_RADIO_ALL, //IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT,
-                           IRQ_RADIO_ALL, //IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT,
-                           IRQ_RADIO_NONE,
-                           IRQ_RADIO_NONE );
+    // SX126xSetDioIrqParams(IRQ_RADIO_ALL, // IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT,
+    //                       IRQ_RADIO_ALL, // IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT,
+    //                       IRQ_RADIO_NONE,
+    //                       IRQ_RADIO_NONE);
+
+    SX126xSetDioIrqParams(IRQ_RX_DONE, // IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT,IRQ_RADIO_ALL
+                          IRQ_RX_DONE, // IRQ_RX_DONE | IRQ_RX_TX_TIMEOUT,IRQ_RADIO_ALL
+                          IRQ_RADIO_NONE,
+                          IRQ_RADIO_NONE);
 
     if( timeout != 0 )
     {
@@ -1649,10 +1654,10 @@ void on_rx_done( void )
 {
     printf("-----RX Done\n");
 }
-void on_preamble_detected( void )
-{
-    printf("valid preamble\n");
-} 
+// void on_preamble_detected( void )
+// {
+//     printf("valid preamble\n");
+// } 
 void on_syncword_valid( void )
 {
     printf("valid sync word\n");
