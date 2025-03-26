@@ -1,3 +1,5 @@
+## 2025/03/25
+1. add the user guide, the auther is wangpie
 ## 2025/03/06 09:40
 1. the config is sf7,125k,4/5, 470000000, tx_power=8, variable packet, IQ invert is false
 2. the RX interrupt mask is only RX_DONE
