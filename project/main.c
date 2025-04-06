@@ -87,7 +87,8 @@
 //#define RF_FREQUENCY                                868000000 // Hz
 //#define RF_FREQUENCY                                868000999 // Hz
 // #define RF_FREQUENCY                                868000999 // Hz
-#define RF_FREQUENCY                                470000000 // Hz
+//#define RF_FREQUENCY                                470000000 // Hz
+#define RF_FREQUENCY                                498956000 // Hz
 
 #define TX_OUTPUT_POWER                             8        // dBm
 
@@ -311,9 +312,9 @@ int main( void )
     // Radio.StartCad();
     
 
-    Radio.Rx( RX_TIMEOUT_VALUE );
-    printf("start rx packet...\n");
-    State=LOWPOWER;
+    // Radio.Rx( RX_TIMEOUT_VALUE );
+    // printf("start rx packet...\n");
+    // State=LOWPOWER;
 
 
     // rtc_set_alarm(2048);
@@ -330,14 +331,14 @@ int main( void )
     // DelayMs( 1 );
     // Radio.Send( Buffer, BufferSize );
 
-    // Sw1179_To_Tx();
-    // PA30dbm_To_Tx();
-    // printf("the cw frequency is %d, the tx power is %d\n",RF_FREQUENCY,22);
-    // Radio.SetTxContinuousWave(RF_FREQUENCY,13,0xffff);
-    // while (1)
-    // {
-    //     ;
-    // }
+    Sw1179_To_Tx();
+    PA30dbm_To_Tx();
+    printf("the cw frequency is %d, the tx power is %d\n",RF_FREQUENCY,7);
+    Radio.SetTxContinuousWave(RF_FREQUENCY,13,0xffff);
+    while (1)
+    {
+        ;
+    }
     // while (1)
     // {
     //      LED_On(LED_TX);

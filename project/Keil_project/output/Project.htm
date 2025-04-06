@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\output\Project.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\output\Project.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Wed Mar 26 19:05:39 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 6190004: Last Updated: Sat Apr  5 11:21:34 2025
 <BR><P>
 <H3>Maximum Stack Usage =        372 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -199,11 +199,10 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_gd32f30x_hd.o(RESET)
 </UL>
-<P><STRONG><a name="[46]"></a>main</STRONG> (Thumb, 512 bytes, Stack size 112 bytes, main.o(.text))
-<BR><BR>[Stack]<UL><LI>Max Depth = 280<LI>Call Chain = main &rArr; Usart_Init &rArr; usart_baudrate_set &rArr; rcu_clock_freq_get
+<P><STRONG><a name="[46]"></a>main</STRONG> (Thumb, 396 bytes, Stack size 104 bytes, main.o(.text))
+<BR><BR>[Stack]<UL><LI>Max Depth = 272<LI>Call Chain = main &rArr; Usart_Init &rArr; usart_baudrate_set &rArr; rcu_clock_freq_get
 </UL>
-<BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayMs
-<LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PA30dbm_To_Tx
+<BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PA30dbm_To_Tx
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Sw1179_To_Tx
 <LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PA30dbm_To_Rx
 <LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Sw1179_To_Rx
@@ -228,8 +227,8 @@ Global Symbols
 <P><STRONG><a name="[47]"></a>OnTxDone</STRONG> (Thumb, 130 bytes, Stack size 16 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = OnTxDone &rArr; printf
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_1ms
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayMs
+<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayMs
+<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_1ms
 <LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;PA30dbm_To_Tx
 <LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Sw1179_To_Tx
 <LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printf
@@ -278,7 +277,7 @@ Global Symbols
 <P><STRONG><a name="[8e]"></a>on_cad_done_undetected</STRONG> (Thumb, 24 bytes, Stack size 8 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 12<LI>Call Chain = on_cad_done_undetected &rArr; delay_1ms
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_1ms
+<BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_1ms
 </UL>
 <BR>[Called By]<UL><LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RadioIrqProcess
 </UL>
@@ -300,11 +299,11 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[8a]"></a>delay_1ms</STRONG> (Thumb, 38 bytes, Stack size 4 bytes, systick.o(.text))
+<P><STRONG><a name="[89]"></a>delay_1ms</STRONG> (Thumb, 38 bytes, Stack size 4 bytes, systick.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = delay_1ms
 </UL>
 <BR>[Called By]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;on_cad_done_undetected
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayMs
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayMs
 <LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnTxDone
 </UL>
 
@@ -1203,7 +1202,7 @@ Global Symbols
 <LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RadioSetRxConfig
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RadioSetChannel
 <LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RadioSetModem
-<LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayMs
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayMs
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> radio.o(.rodata.Radio)
 </UL>
@@ -1301,7 +1300,7 @@ Global Symbols
 <P><STRONG><a name="[5e]"></a>RadioSleep</STRONG> (Thumb, 46 bytes, Stack size 16 bytes, radio.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 148<LI>Call Chain = RadioSleep &rArr; SX126xSetSleep &rArr; SX126xWriteCommand &rArr; SX126xCheckDeviceReady &rArr; SX126xWakeup &rArr; SpiInOut &rArr; gpio_input_bit_get
 </UL>
-<BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayMs
+<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayMs
 <LI><a href="#[c4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX126xSetSleep
 </UL>
 <BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RadioIsChannelFree
@@ -1997,16 +1996,15 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_gd32f30x_hd.o(RESET)
 </UL>
-<P><STRONG><a name="[89]"></a>DelayMs</STRONG> (Thumb, 16 bytes, Stack size 16 bytes, gd32f303rct6_board.o(.text))
+<P><STRONG><a name="[8a]"></a>DelayMs</STRONG> (Thumb, 16 bytes, Stack size 16 bytes, gd32f303rct6_board.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = DelayMs &rArr; delay_1ms
 </UL>
-<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_1ms
+<BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_1ms
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RadioSleep
 <LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RadioIsChannelFree
 <LI><a href="#[47]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;OnTxDone
 <LI><a href="#[7c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX126xReset
-<LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[109]"></a>GpioWrite</STRONG> (Thumb, 246 bytes, Stack size 8 bytes, gd32f303rct6_board.o(.text))
@@ -2196,7 +2194,7 @@ Global Symbols
 <P><STRONG><a name="[7c]"></a>SX126xReset</STRONG> (Thumb, 52 bytes, Stack size 24 bytes, sx1262-board.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 44<LI>Call Chain = SX126xReset &rArr; DelayMs &rArr; delay_1ms
 </UL>
-<BR>[Calls]<UL><LI><a href="#[89]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayMs
+<BR>[Calls]<UL><LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DelayMs
 <LI><a href="#[109]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GpioWrite
 </UL>
 <BR>[Called By]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SX126xInit

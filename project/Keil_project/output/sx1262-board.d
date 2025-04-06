@@ -1,12 +1,12 @@
 ./output/sx1262-board.o: ..\..\LLCC68\board\sx1262-board.c \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdlib.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
   ..\..\LLCC68\src\radio\radio.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
   ..\..\LLCC68\board\sx126x-board.h \
   ..\..\LLCC68\src\radio\sx126x\sx126x.h \
-  C:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
   ..\..\LLCC68\board\gd32f303rct6_gpio.h \
   ..\..\LLCC68\board\gd32f303rct6_spi.h \
   ..\..\LLCC68\board\gd32f303rct6_board.h \
