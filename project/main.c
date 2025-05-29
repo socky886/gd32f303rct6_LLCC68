@@ -83,14 +83,15 @@
 #define USE_MODEM_LORA
 
 //#define RF_FREQUENCY                                433000000 // Hz
-// #define RF_FREQUENCY                                915000000 // Hz
+#define RF_FREQUENCY                                915000000 // Hz
 //#define RF_FREQUENCY                                868000000 // Hz
 //#define RF_FREQUENCY                                868000999 // Hz
 // #define RF_FREQUENCY                                868000999 // Hz
 //#define RF_FREQUENCY                                470000000 // Hz
-#define RF_FREQUENCY                                498956000 // Hz
+//#define RF_FREQUENCY                                498956000 // Hz
 
-#define TX_OUTPUT_POWER                             8        // dBm
+// #define TX_OUTPUT_POWER                             8        // dBm
+#define TX_OUTPUT_POWER                             22        // dBm
 
 #if defined( USE_MODEM_LORA )
 
@@ -319,26 +320,26 @@ int main( void )
 
     // rtc_set_alarm(2048);
 
-    // State=TX;
-    // printf("start tx packet...\n");
-    // Sw1179_To_Tx();
-    // PA30dbm_To_Tx();
-    // for ( i = 0; i < 48; i++)
-    // {
-    //     Buffer[i]='A'+i;
-    // }
-    // BufferSize=10;
-    // DelayMs( 1 );
-    // Radio.Send( Buffer, BufferSize );
-
+    State=TX;
+    printf("start tx packet...\n");
     Sw1179_To_Tx();
     PA30dbm_To_Tx();
-    printf("the cw frequency is %d, the tx power is %d\n",RF_FREQUENCY,7);
-    Radio.SetTxContinuousWave(RF_FREQUENCY,13,0xffff);
-    while (1)
+    for ( i = 0; i < 48; i++)
     {
-        ;
+        Buffer[i]='A'+i;
     }
+    BufferSize=10;
+    DelayMs( 1 );
+    Radio.Send( Buffer, BufferSize );
+
+    // Sw1179_To_Tx();
+    // PA30dbm_To_Tx();
+    // printf("the cw frequency is %d, the tx power is %d\n",RF_FREQUENCY,7);
+    // Radio.SetTxContinuousWave(RF_FREQUENCY,13,0xffff);
+    // while (1)
+    // {
+    //     ;
+    // }
     // while (1)
     // {
     //      LED_On(LED_TX);

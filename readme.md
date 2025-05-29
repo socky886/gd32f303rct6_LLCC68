@@ -1,3 +1,7 @@
+## 2025/05/29
+1. add the pc software to burn the GD32F303RCT6
+2. add the user guide to burn the bin
+3. add the transmit bin and receiver bin
 ## 2025/03/25
 1. add the user guide, the auther is wangpie
 ## 2025/03/06 09:40
