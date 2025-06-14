@@ -1,3 +1,7 @@
+## 2025/06/13
+1. set the rx continous mode
+2. can control the led by key press
+3. the frequency is 916123456HZ
 ## 2025/05/29
 1. add the pc software to burn the GD32F303RCT6
 2. add the user guide to burn the bin

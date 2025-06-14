@@ -111,4 +111,6 @@ void rtc_configuration(void);
 void time_set(void);
 void rtc_set_alarm(uint32_t ms);
 void rtc_reset_alarm(void);
+void iwdg_config(void);
+void iwdg_feed(void);
 #endif

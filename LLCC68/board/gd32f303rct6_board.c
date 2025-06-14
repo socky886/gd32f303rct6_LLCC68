@@ -1,10 +1,12 @@
 #include <stdio.h>
+#include "gd32f30x.h"
 #include "gd32f303rct6_board.h"
 #include "gd32f303rct6_gpio.h"
 #include "gd32f303rct6_spi.h"
 #include "gd32f303rct6_delay.h"
 #include "systick.h"
 
+extern int8_t user_pressed;
 
 Gpio_t sw1179_pin={
     .pinIndex=ANT_SW,
@@ -216,7 +218,8 @@ void EXTI10_15_IRQHandler()
 {
     if(RESET != exti_interrupt_flag_get(USER_KEY_EXTI_LINE)) {
        // gd_eval_led_toggle(LED3);
-        printf("user key press\n");
+        //printf("user key press\n");
+        user_pressed=1;
         exti_interrupt_flag_clear(USER_KEY_EXTI_LINE);
     }
 
@@ -462,4 +465,29 @@ void rtc_set_alarm(uint32_t ms)
 void rtc_reset_alarm(void)
 {
     rtc_alarm_config(0);
+}
+
+void iwdg_config(void)
+ {
+    /* Enable FWDGT write access */
+    fwdgt_write_enable();
+
+    /* Configure prescaler: FWDGT_PSC_DIV64 */
+    if (fwdgt_prescaler_value_config(FWDGT_PSC_DIV64) != SUCCESS) {
+        while(1); // Hang if config fails
+    }
+
+    /* Set reload value (max = 0x0FFF = 4095) for timeout ~6.5s */
+    if (fwdgt_reload_value_config(0x0FFF) != SUCCESS) {
+        while(1); // Hang if config fails
+    }
+
+    /* Start watchdog */
+    fwdgt_enable();
+}
+
+void iwdg_feed(void) 
+{
+     /* Refresh the counter */
+    fwdgt_counter_reload();
 }

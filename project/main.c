@@ -83,7 +83,7 @@
 #define USE_MODEM_LORA
 
 //#define RF_FREQUENCY                                433000000 // Hz
-#define RF_FREQUENCY                                915000000 // Hz
+#define RF_FREQUENCY                                916123456 // Hz
 //#define RF_FREQUENCY                                868000000 // Hz
 //#define RF_FREQUENCY                                868000999 // Hz
 // #define RF_FREQUENCY                                868000999 // Hz
@@ -170,11 +170,14 @@ States_t State = LOWPOWER;
 int8_t RssiValue = 0;
 int8_t SnrValue = 0;
 int8_t nChangeChannel=0;
+int8_t led_status=1;
+int8_t user_pressed=0;
 /*!
  * Radio events function pointer
  */
 static RadioEvents_t RadioEvents;
 
+void tx_packet(void);
 /*!
  * LED GPIO pins objects
  */
@@ -225,6 +228,7 @@ int main( void )
     //Spi_Init();
     soft_spi_init();
     //rtc_configuration();
+    iwdg_config();
 
     printf("===================weijunfeng 20231002===================\n");
     SX126xReset();
@@ -253,10 +257,10 @@ int main( void )
                                    LORA_PREAMBLE_LENGTH, LORA_FIX_LENGTH_PAYLOAD_ON,
                                    true, 0, 0, LORA_IQ_INVERSION_ON, 3000 );
 
-    // Radio.SetRxConfig( MODEM_LORA, LORA_BANDWIDTH, LORA_SPREADING_FACTOR,
-    //                                LORA_CODINGRATE, 0, LORA_PREAMBLE_LENGTH,
-    //                                LORA_SYMBOL_TIMEOUT, LORA_FIX_LENGTH_PAYLOAD_ON,
-    //                                0, true, 0, 0, LORA_IQ_INVERSION_ON, true );
+    Radio.SetRxConfig( MODEM_LORA, LORA_BANDWIDTH, LORA_SPREADING_FACTOR,
+                                   LORA_CODINGRATE, 0, LORA_PREAMBLE_LENGTH,
+                                   LORA_SYMBOL_TIMEOUT, LORA_FIX_LENGTH_PAYLOAD_ON,
+                                   0, true, 0, 0, LORA_IQ_INVERSION_ON, true );
 
     SX126xSetLoRaSymbNumTimeout( 0x00 );
     
@@ -268,10 +272,10 @@ int main( void )
     Radio.Sleep();
     SX126xSetStandby(STDBY_XOSC);
 
-    Radio.SetRxConfig_meter( MODEM_LORA, LORA_BANDWIDTH, LORA_SPREADING_FACTOR,
-                                   LORA_CODINGRATE, 0, LORA_PREAMBLE_LENGTH,
-                                   LORA_SYMBOL_TIMEOUT, LORA_FIX_LENGTH_PAYLOAD_ON,
-                                   0, true, 0, 0, LORA_IQ_INVERSION_ON, false );
+    // Radio.SetRxConfig_meter( MODEM_LORA, LORA_BANDWIDTH, LORA_SPREADING_FACTOR,
+    //                                LORA_CODINGRATE, 0, LORA_PREAMBLE_LENGTH,
+    //                                LORA_SYMBOL_TIMEOUT, LORA_FIX_LENGTH_PAYLOAD_ON,
+    //                                0, true, 0, 0, LORA_IQ_INVERSION_ON, false );
 
     //Radio.SetMaxPayloadLength( MODEM_LORA, BUFFER_SIZE );
 
@@ -313,24 +317,24 @@ int main( void )
     // Radio.StartCad();
     
 
-    // Radio.Rx( RX_TIMEOUT_VALUE );
-    // printf("start rx packet...\n");
-    // State=LOWPOWER;
+    Radio.Rx( RX_TIMEOUT_VALUE );
+    printf("start rx packet...\n");
+    State=LOWPOWER;
 
 
     // rtc_set_alarm(2048);
 
-    State=TX;
-    printf("start tx packet...\n");
-    Sw1179_To_Tx();
-    PA30dbm_To_Tx();
-    for ( i = 0; i < 48; i++)
-    {
-        Buffer[i]='A'+i;
-    }
-    BufferSize=10;
-    DelayMs( 1 );
-    Radio.Send( Buffer, BufferSize );
+    // State=TX;
+    // printf("start tx packet...\n");
+    // Sw1179_To_Tx();
+    // PA30dbm_To_Tx();
+    // for ( i = 0; i < 48; i++)
+    // {
+    //     Buffer[i]='A'+i;
+    // }
+    // BufferSize=10;
+    // DelayMs( 1 );
+    // Radio.Send( Buffer, BufferSize );
 
     // Sw1179_To_Tx();
     // PA30dbm_To_Tx();
@@ -350,15 +354,36 @@ int main( void )
     
     while( 1 )
     {
+        if(user_pressed)
+        {
+            user_pressed=0;
+            tx_packet();
+        }
         // Process Radio IRQ
         if( Radio.IrqProcess != NULL )
         {
             // printf("eeeee\n");
             Radio.IrqProcess( );
         }
+        iwdg_feed();
     }
 }
+void tx_packet(void)
+{
+    int i;
+    Radio.Standby();
+    
+    Sw1179_To_Tx();
+    PA30dbm_To_Tx();
+    for ( i = 0; i < 5; i++)
+    {
+        Buffer[i]=i+1;
+    }
+    BufferSize=5;
+    DelayMs( 1 );
+    Radio.Send( Buffer, BufferSize );
 
+}
 void OnTxDone( void )
 {
     int i;
@@ -375,22 +400,55 @@ void OnTxDone( void )
     // if(nChangeChannel==2)
     //   nChangeChannel=0;
     
-    delay_1ms(5);
+    // delay_1ms(5);
 
-    Sw1179_To_Tx();
-    PA30dbm_To_Tx();
-    for ( i = 0; i < 48; i++)
-    {
-        Buffer[i]='A'+i;
-    }
-    BufferSize=10;
-    DelayMs( 1 );
-    Radio.Send( Buffer, BufferSize );
+    // Sw1179_To_Tx();
+    // PA30dbm_To_Tx();
+    // for ( i = 0; i < 5; i++)
+    // {
+    //     Buffer[i]=1+i;
+    // }
+    // BufferSize=5;
+    // DelayMs( 1000 );
+    // Radio.Send( Buffer, BufferSize );
     
     //delay_1ms(2000);
     // State= LOWPOWER;
 
 }
+
+// void OnTxDone( void )
+// {
+//     int i;
+//     printf("transmit packet successfully\n");
+//     //Radio.Sleep( );
+//     //State = TX;
+//     Radio.Standby();
+//     // nChangeChannel++;
+//     // if((nChangeChannel%2)==1)
+//     //     Radio.SetChannel( 865000000 );
+//     // else
+//     //     Radio.SetChannel( 868000000 );
+    
+//     // if(nChangeChannel==2)
+//     //   nChangeChannel=0;
+    
+//     delay_1ms(5);
+
+//     Sw1179_To_Tx();
+//     PA30dbm_To_Tx();
+//     for ( i = 0; i < 48; i++)
+//     {
+//         Buffer[i]='A'+i;
+//     }
+//     BufferSize=10;
+//     DelayMs( 1 );
+//     Radio.Send( Buffer, BufferSize );
+    
+//     //delay_1ms(2000);
+//     // State= LOWPOWER;
+
+// }
 
 void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
 {
@@ -408,6 +466,17 @@ void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
         printf("%02X ", Buffer[i]);
     }
     printf("\n");
+    if (size == 5)
+    {
+        if (Buffer[0] == 1 && Buffer[1] == 2 && Buffer[2] == 3 && Buffer[3] == 4 && Buffer[4] == 5)
+        {
+            led_status = -led_status;
+            if (led_status == 1)
+                LED_On(LED_TX);
+            else
+                LED_Off(LED_TX);
+        }
+    }
 
     // delay_1ms(900);
     // Radio.StartCad();
@@ -428,13 +497,15 @@ void OnTxTimeout( void )
 
 void OnRxTimeout( void )
 {
-    Radio.Sleep( );
+    //Radio.Sleep( );
+     Radio.Rx( RX_TIMEOUT_VALUE );
     State = RX_TIMEOUT;
 }
 
 void OnRxError( void )
 {
-    Radio.Sleep( );
+   // Radio.Sleep( );
+    Radio.Rx( RX_TIMEOUT_VALUE );
     State = RX_ERROR;
 }
 
