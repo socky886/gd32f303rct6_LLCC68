@@ -1,3 +1,6 @@
+## 2025、09/22
+1. generate new bin to support 30DBM Radio Board
+2. the carrier frequency is 471M, the PA is SGM33685C
 ## 2025/06/13
 1. set the rx continous mode
 2. can control the led by key press

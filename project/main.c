@@ -83,15 +83,15 @@
 #define USE_MODEM_LORA
 
 //#define RF_FREQUENCY                                433000000 // Hz
-#define RF_FREQUENCY                                916123456 // Hz
+//#define RF_FREQUENCY                                916123456 // Hz
 //#define RF_FREQUENCY                                868000000 // Hz
 //#define RF_FREQUENCY                                868000999 // Hz
 // #define RF_FREQUENCY                                868000999 // Hz
-//#define RF_FREQUENCY                                470000000 // Hz
+#define RF_FREQUENCY                                471000000 // Hz
 //#define RF_FREQUENCY                                498956000 // Hz
 
-// #define TX_OUTPUT_POWER                             8        // dBm
-#define TX_OUTPUT_POWER                             22        // dBm
+#define TX_OUTPUT_POWER                             17        // dBm
+// #define TX_OUTPUT_POWER                             22        // dBm
 
 #if defined( USE_MODEM_LORA )
 
@@ -371,52 +371,42 @@ int main( void )
 void tx_packet(void)
 {
     int i;
+    
     Radio.Standby();
     
     Sw1179_To_Tx();
     PA30dbm_To_Tx();
-    for ( i = 0; i < 5; i++)
+    RadioSetTxInfinitePreamble(RF_FREQUENCY,TX_OUTPUT_POWER,0);
+    DelayMs( 1000 );
+
+    Radio.Standby();
+
+    for ( i = 0; i < 10; i++)
     {
-        Buffer[i]=i+1;
+        Buffer[i]=65+i;
     }
     BufferSize=5;
     DelayMs( 1 );
     Radio.Send( Buffer, BufferSize );
 
 }
-void OnTxDone( void )
-{
-    int i;
-    printf("transmit packet successfully\n");
-    //Radio.Sleep( );
-    //State = TX;
-    Radio.Standby();
-    // nChangeChannel++;
-    // if((nChangeChannel%2)==1)
-    //     Radio.SetChannel( 865000000 );
-    // else
-    //     Radio.SetChannel( 868000000 );
+// void tx_packet(void)
+// {
+//     int i;
+//     Radio.Standby();
     
-    // if(nChangeChannel==2)
-    //   nChangeChannel=0;
-    
-    // delay_1ms(5);
+//     Sw1179_To_Tx();
+//     PA30dbm_To_Tx();
 
-    // Sw1179_To_Tx();
-    // PA30dbm_To_Tx();
-    // for ( i = 0; i < 5; i++)
-    // {
-    //     Buffer[i]=1+i;
-    // }
-    // BufferSize=5;
-    // DelayMs( 1000 );
-    // Radio.Send( Buffer, BufferSize );
-    
-    //delay_1ms(2000);
-    // State= LOWPOWER;
+//     for ( i = 0; i < 5; i++)
+//     {
+//         Buffer[i]=i+1;
+//     }
+//     BufferSize=5;
+//     DelayMs( 1 );
+//     Radio.Send( Buffer, BufferSize );
 
-}
-
+// }
 // void OnTxDone( void )
 // {
 //     int i;
@@ -433,22 +423,55 @@ void OnTxDone( void )
 //     // if(nChangeChannel==2)
 //     //   nChangeChannel=0;
     
-//     delay_1ms(5);
+//     // delay_1ms(5);
 
-//     Sw1179_To_Tx();
-//     PA30dbm_To_Tx();
-//     for ( i = 0; i < 48; i++)
-//     {
-//         Buffer[i]='A'+i;
-//     }
-//     BufferSize=10;
-//     DelayMs( 1 );
-//     Radio.Send( Buffer, BufferSize );
+//     // Sw1179_To_Tx();
+//     // PA30dbm_To_Tx();
+//     // for ( i = 0; i < 5; i++)
+//     // {
+//     //     Buffer[i]=1+i;
+//     // }
+//     // BufferSize=5;
+//     // DelayMs( 1000 );
+//     // Radio.Send( Buffer, BufferSize );
     
 //     //delay_1ms(2000);
 //     // State= LOWPOWER;
 
 // }
+
+void OnTxDone( void )
+{
+    int i;
+    printf("transmit packet successfully\n");
+    //Radio.Sleep( );
+    //State = TX;
+    Radio.Standby();
+    // nChangeChannel++;
+    // if((nChangeChannel%2)==1)
+    //     Radio.SetChannel( 865000000 );
+    // else
+    //     Radio.SetChannel( 868000000 );
+    
+    // if(nChangeChannel==2)
+    //   nChangeChannel=0;
+    
+    delay_1ms(5);
+
+    Sw1179_To_Tx();
+    PA30dbm_To_Tx();
+    for ( i = 0; i < 48; i++)
+    {
+        Buffer[i]='A'+i;
+    }
+    BufferSize=10;
+    DelayMs( 1 );
+    Radio.Send( Buffer, BufferSize );
+    
+    //delay_1ms(2000);
+    // State= LOWPOWER;
+
+}
 
 void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
 {
@@ -463,20 +486,21 @@ void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
     printf("RSSI=%d,SNR=%d  ",RssiValue,SnrValue);
     for (i = 0; i < BufferSize; i++)
     {
-        printf("%02X ", Buffer[i]);
+        //printf("%02X ", Buffer[i]);
+        printf("%c ", Buffer[i]);
     }
     printf("\n");
-    if (size == 5)
-    {
-        if (Buffer[0] == 1 && Buffer[1] == 2 && Buffer[2] == 3 && Buffer[3] == 4 && Buffer[4] == 5)
-        {
-            led_status = -led_status;
-            if (led_status == 1)
-                LED_On(LED_TX);
-            else
-                LED_Off(LED_TX);
-        }
-    }
+    // if (size == 5)
+    // {
+    //     if (Buffer[0] == 1 && Buffer[1] == 2 && Buffer[2] == 3 && Buffer[3] == 4 && Buffer[4] == 5)
+    //     {
+    //         led_status = -led_status;
+    //         if (led_status == 1)
+    //             LED_On(LED_TX);
+    //         else
+    //             LED_Off(LED_TX);
+    //     }
+    // }
 
     // delay_1ms(900);
     // Radio.StartCad();

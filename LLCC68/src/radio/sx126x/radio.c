@@ -1395,7 +1395,15 @@ void RadioSetTxContinuousWave( uint32_t freq, int8_t power, uint16_t time )
     //TimerSetValue( &TxTimeoutTimer, timeout );
     //TimerStart( &TxTimeoutTimer );
 }
+void RadioSetTxInfinitePreamble( uint32_t freq, int8_t power, uint16_t time )
+{
+    uint32_t timeout = ( uint32_t )time * 1000;
 
+    SX126xSetRfFrequency( freq );
+    SX126xSetRfTxPower( power );
+    SX126xSetTxInfinitePreamble( );
+
+}
 int16_t RadioRssi( RadioModems_t modem )
 {
     return SX126xGetRssiInst( );

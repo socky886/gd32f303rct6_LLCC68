@@ -425,6 +425,7 @@ struct Radio_s
 extern const struct Radio_s Radio;
 
 void Radio_Set_Private_Network(void);
+void RadioSetTxInfinitePreamble( uint32_t freq, int8_t power, uint16_t time );
 #ifdef __cplusplus
 }
 #endif
