@@ -1,6 +1,7 @@
 #ifndef __GD32F303RCT6__BOARD__H__
 #define __GD32F303RCT6__BOARD__H__
 #include "gd32f30x.h"
+#include "sx126x-board.h"
 
 typedef enum{
     LED_TX=0,
@@ -113,4 +114,12 @@ void rtc_set_alarm(uint32_t ms);
 void rtc_reset_alarm(void);
 void iwdg_config(void);
 void iwdg_feed(void);
+
+// 2025/09/23
+void tx_by_pa_sw_config(void);
+void tx_bypass_pa_sw_config(void);
+void rx_sw_config(void);
+void sleep_sw_config(void);
+void por_sw_config(void);
+
 #endif

@@ -21,8 +21,12 @@
  * \author    Gregory Cristian ( Semtech )
  */
 #include <string.h>
-
+// #include "board.h"
+// #include "gpio.h"
+// #include "delay.h"
+// #include "timer.h"
 #include "radio.h"
+
 #include "systick.h"
 #include "gd32f303rct6_board.h"
 #include <stdio.h>
@@ -173,21 +177,7 @@ int8_t user_pressed=0;
  */
 static RadioEvents_t RadioEvents;
 
-typedef enum
-{
-    TX_PACKET_BY_PA=0,
-    TX_PACKET_BYPASS_PA,
-    RX_PACKET,
-    LOWPOWER_STANDBY,
-    LOWPOWER_SLEEP,
-    NONE_STATE,
-} New_States_t;
-
-New_States_t New_State=NONE_STATE;
-int nstep=0;
 void tx_packet(void);
-void tx_packet_by_pa(void);
-void tx_packet_bypass_pa(void);
 /*!
  * LED GPIO pins objects
  */
@@ -327,10 +317,10 @@ int main( void )
     // SX126xSetCadParams(0x00,0x19,0x0a,0x01,64000);
     // Radio.StartCad();
     
-    // rx_sw_config();
-    // Radio.Rx( RX_TIMEOUT_VALUE );
-    // printf("start rx packet...\n");
-    // State=LOWPOWER;
+    rx_sw_config();
+    Radio.Rx( RX_TIMEOUT_VALUE );
+    printf("start rx packet...\n");
+    State=LOWPOWER;
 
 
     // rtc_set_alarm(2048);
@@ -362,127 +352,42 @@ int main( void )
     //           LED_Off(LED_TX);
     //           delay_1ms(2000);
     // }
-    New_State = TX_PACKET_BY_PA;
-    //New_State = RX_PACKET;
-    while (1)
+    
+    while( 1 )
     {
-        switch (New_State)
+        if(user_pressed)
         {
-        case TX_PACKET_BY_PA:
-            New_State = NONE_STATE;
-            tx_by_pa_sw_config();
-            printf("switch to tx by pa mode\n");
-            tx_packet_by_pa();
-
-            nstep = TX_PACKET_BY_PA;
-            break;
-        case TX_PACKET_BYPASS_PA:
-            New_State = NONE_STATE;
-            tx_bypass_pa_sw_config();
-            printf("switch to tx bypass pa mode\n");
-            tx_packet_bypass_pa();
-            nstep = TX_PACKET_BYPASS_PA;
-            break;
-        case RX_PACKET:
-            New_State = NONE_STATE;
-            rx_sw_config();
-            printf("switch to rx mode\n");
-            Radio.Rx(RX_TIMEOUT_VALUE);
-            nstep = RX_PACKET;
-            t = 0;
-            printf("start rx packet...\n");
-            break;
-        case LOWPOWER_STANDBY:
-            New_State = NONE_STATE;
-            por_sw_config();
-            Radio.Standby();
-
-            break;
-        case LOWPOWER_SLEEP:
-            New_State = NONE_STATE;
-            sleep_sw_config();
-            Radio.Sleep();
-            printf("enter sleep mode\n");
-            nstep = LOWPOWER_SLEEP;
-
-            break;
-        default:
-            break;
+            user_pressed=0;
+            tx_packet();
         }
-
-        if (New_State == NONE_STATE)
+        // Process Radio IRQ
+        if( Radio.IrqProcess != NULL )
         {
-            // printf("irq process\n" );
-            if (Radio.IrqProcess != NULL)
-            {
-
-                Radio.IrqProcess();
-            }
-            iwdg_feed();
+            // printf("eeeee\n");
+            Radio.IrqProcess( );
         }
-
-        if (nstep == RX_PACKET)
-        {
-            DelayMs(1);
-            t++;
-            if (t >= 3000)
-            {
-                New_State = LOWPOWER_SLEEP;
-            }
-        }
-        if(nstep==LOWPOWER_SLEEP)
-        {
-            DelayMs(1);
-            t++;
-            if(t>=10)
-            {
-                New_State=TX_PACKET_BY_PA;
-            }
-        }
+        iwdg_feed();
     }
 }
-void tx_packet_by_pa(void)
+void tx_packet(void)
 {
     int i;
     
-    // Radio.Standby();
+    Radio.Standby();
     
-    // Sw1179_To_Tx();
-    // PA30dbm_To_Tx();
-    // RadioSetTxInfinitePreamble(RF_FREQUENCY,TX_OUTPUT_POWER,0);
-    // DelayMs( 1000 );
-    printf("start tx packet...\n");
+    Sw1179_To_Tx();
+    PA30dbm_To_Tx();
+    RadioSetTxInfinitePreamble(RF_FREQUENCY,TX_OUTPUT_POWER,0);
+    DelayMs( 1000 );
+
     Radio.Standby();
 
-    for ( i = 0; i < 30; i++)
+    for ( i = 0; i < 10; i++)
     {
         Buffer[i]=65+i;
     }
-    BufferSize=20;
-    //DelayMs( 1 );
-    Radio.Send( Buffer, BufferSize );
-
-}
-
-void tx_packet_bypass_pa(void)
-{
-    int i;
-    
-    // Radio.Standby();
-    
-    // Sw1179_To_Tx();
-    // PA30dbm_To_Tx();
-    // RadioSetTxInfinitePreamble(RF_FREQUENCY,TX_OUTPUT_POWER,0);
-    // DelayMs( 1000 );
-    printf("start tx packet...\n");
-    Radio.Standby();
-
-    for ( i = 0; i < 30; i++)
-    {
-        Buffer[i]=65+i;
-    }
-    BufferSize=15;
-    //DelayMs( 1 );
+    BufferSize=5;
+    DelayMs( 1 );
     Radio.Send( Buffer, BufferSize );
 
 }
@@ -552,32 +457,27 @@ void OnTxDone( void )
     // if(nChangeChannel==2)
     //   nChangeChannel=0;
     
-    // delay_1ms(5);
+    delay_1ms(5);
 
-    // Sw1179_To_Tx();
-    // PA30dbm_To_Tx();
-    // for ( i = 0; i < 48; i++)
-    // {
-    //     Buffer[i]='A'+i;
-    // }
-    // BufferSize=10;
-    // DelayMs( 1 );
-    // Radio.Send( Buffer, BufferSize );
+    Sw1179_To_Tx();
+    PA30dbm_To_Tx();
+    for ( i = 0; i < 48; i++)
+    {
+        Buffer[i]='A'+i;
+    }
+    BufferSize=10;
+    DelayMs( 1 );
+    Radio.Send( Buffer, BufferSize );
     
-    delay_1ms(50);
+    //delay_1ms(2000);
     // State= LOWPOWER;
-    if(nstep==TX_PACKET_BY_PA)
-        New_State=TX_PACKET_BYPASS_PA;
-    else if(nstep==TX_PACKET_BYPASS_PA)
-        //New_State=RX_PACKET;
-        New_State=TX_PACKET_BY_PA;
 
 }
 
 void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
 {
     int i;
-    Radio.Standby( );
+    Radio.Sleep( );
     BufferSize = size;
     memcpy( Buffer, payload, BufferSize );
     RssiValue = rssi;
@@ -611,8 +511,6 @@ void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
     //rtc_reset_alarm();
     //State=S_CAD;
     //delay_1ms(1000);
-    // if(nstep==RX_PACKET)
-    //     New_State=RX_PACKET;
    
 }
 

@@ -491,3 +491,70 @@ void iwdg_feed(void)
      /* Refresh the counter */
     fwdgt_counter_reload();
 }
+
+
+// 2025/09/23
+/**
+ * @brief config the switch for tx by pa
+ * set DIO3 to output low
+ * 
+ */
+void tx_by_pa_sw_config(void)
+{
+    
+    SX126xWriteRegister(0x0580, SX126xReadRegister(0x0580) | 0x08);
+    SX126xWriteRegister(0x0583, SX126xReadRegister(0x0583) & ~0x08);
+    SX126xWriteRegister(0x0584, SX126xReadRegister(0x0584) & ~0x08);
+    SX126xWriteRegister(0x0585, SX126xReadRegister(0x0585) & ~0x08);
+    // set dio3 output low
+    SX126xWriteRegister(0x0920, SX126xReadRegister(0x0920) & ~0x08);
+
+}
+/**
+ * @brief confgi the switch for tx bypass pa
+ *  set DIO3 to output high
+ */
+void tx_bypass_pa_sw_config(void)
+{
+    SX126xWriteRegister(0x0580, SX126xReadRegister(0x0580) | 0x08);
+    SX126xWriteRegister(0x0583, SX126xReadRegister(0x0583) & ~0x08);
+    SX126xWriteRegister(0x0584, SX126xReadRegister(0x0584) & ~0x08);
+    SX126xWriteRegister(0x0585, SX126xReadRegister(0x0585) & ~0x08);
+    // set dio3 output high
+    SX126xWriteRegister(0x0920, SX126xReadRegister(0x0920) | 0x08);
+
+}
+/**
+ * @brief config the switch for rx
+ * set DIO3 to output high
+ */
+void rx_sw_config(void)
+{
+     SX126xWriteRegister(0x0580, SX126xReadRegister(0x0580) | 0x08);
+    SX126xWriteRegister(0x0583, SX126xReadRegister(0x0583) & ~0x08);
+    SX126xWriteRegister(0x0584, SX126xReadRegister(0x0584) & ~0x08);
+    SX126xWriteRegister(0x0585, SX126xReadRegister(0x0585) & ~0x08);
+    // set dio3 output high
+    SX126xWriteRegister(0x0920, SX126xReadRegister(0x0920) | 0x08);
+}
+/**
+ * @brief config the swtich for sleep mode
+ *  set DIO3 to output high
+ */
+void sleep_sw_config(void)
+{
+    ;
+}
+/**
+ * @brief config the switch for power on reset
+ * set DIO3 to output high
+ */
+void por_sw_config(void)
+{
+    SX126xWriteRegister(0x0580, SX126xReadRegister(0x0580) | 0x08);
+    SX126xWriteRegister(0x0583, SX126xReadRegister(0x0583) & ~0x08);
+    SX126xWriteRegister(0x0584, SX126xReadRegister(0x0584) & ~0x08);
+    SX126xWriteRegister(0x0585, SX126xReadRegister(0x0585) & ~0x08);
+    // set dio3 output high
+    SX126xWriteRegister(0x0920, SX126xReadRegister(0x0920) | 0x08);
+}
