@@ -1,7 +1,7 @@
 ## 2025/09/23
 1. add 5 funciton: tx_by_pa_sw_config();tx_bypass_pa_sw_config();rx_sw_config();sleep_sw_config(); por_sw_config();
 ~~~
-// 2025/09/23
+// 2025/09/23 23:17
 /**
  * @brief config the switch for tx by pa
  * set DIO3 to output low
@@ -67,6 +67,7 @@ void por_sw_config(void)
     SX126xWriteRegister(0x0920, SX126xWriteRegister(0x0920) | 0x08);
 }
 ~~~
+2. swith on tx by pass, tx bypass pa, rx and sleep mode.
 ## 2025/09/22
 1. generate new bin to support 30DBM Radio Board
 2. the carrier frequency is 471M, the PA is SGM33685C
