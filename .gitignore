@@ -1,2 +1,12 @@
 # Keil build output
 project/Keil_project/output/
+project/Keil_project/list/
+project/Keil_project/bin/
+
+# Keil user/workspace files
+project/Keil_project/*.uvguix.*
+project/Keil_project/*.uvoptx
+
+# Generic build leftovers
+*.bak
+*.dep
