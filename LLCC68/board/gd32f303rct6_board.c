@@ -8,6 +8,8 @@
 
 extern int8_t user_pressed;
 
+static volatile bool g_use_hw_spi = true;
+
 Gpio_t sw1179_pin={
     .pinIndex=ANT_SW,
 };
@@ -113,6 +115,16 @@ void soft_spi_init(void)
 
 
 
+}
+
+void Board_SetSpiMode(bool use_hw_spi)
+{
+    g_use_hw_spi = use_hw_spi;
+}
+
+bool Board_GetSpiMode(void)
+{
+    return g_use_hw_spi ? true : false;
 }
 /**
  * @brief the default spi is SPI0
@@ -290,22 +302,6 @@ uint32_t GpioRead( Gpio_t *obj )
     return val;
 }
 
-uint16_t SpiInOut1( Spi_t *obj, uint16_t outData )
-//uint16_t SpiInOut( 0, uint16_t outData )
-{
-    uint8_t rxData = 0;
-
-    while (RESET == spi_i2s_flag_get(SPI0, SPI_FLAG_TBE))
-        ;
-    spi_i2s_data_transmit(SPI0, outData);
-
-    while (RESET == spi_i2s_flag_get(SPI0, SPI_FLAG_RBNE))
-        ;
-    rxData = spi_i2s_data_receive(SPI0);
-
-    return( rxData );
-}
-
 void spi_clock_delay(void)
 {
     int i;
@@ -325,35 +321,36 @@ uint16_t SpiInOut( Spi_t *obj, uint16_t outData )
 {
     uint8_t rxData = 0;
 
-    // while (RESET == spi_i2s_flag_get(SPI0, SPI_FLAG_TBE))
-    //     ;
-    // spi_i2s_data_transmit(SPI0, outData);
-
-    // while (RESET == spi_i2s_flag_get(SPI0, SPI_FLAG_RBNE))
-    //     ;
-    // rxData = spi_i2s_data_receive(SPI0);
-
-    int i;
-    for ( i = 0; i < 8; i++)
+    if ( g_use_hw_spi )
     {
-        rxData<<=1;
-        if (outData & 0x80)
-            GPIO_BOP(MOSI_GPIO_PORT) = MOSI_PIN;
-        else
-            GPIO_BC(MOSI_GPIO_PORT) = MOSI_PIN;
+        while ( RESET == spi_i2s_flag_get( SPI0, SPI_FLAG_TBE ) )
+            ;
+        spi_i2s_data_transmit( SPI0, outData );
 
-        // start clock low and delay
-        GPIO_BC(SCK_GPIO_PORT) = SCK_PIN;
-        spi_clock_delay();
-        // start clock high and delay
-        GPIO_BOP(SCK_GPIO_PORT) = SCK_PIN;
-        if(gpio_input_bit_get(MISO_GPIO_PORT,MISO_PIN))
-            rxData|=0x01;
-        spi_clock_delay();
+        while ( RESET == spi_i2s_flag_get( SPI0, SPI_FLAG_RBNE ) )
+            ;
+        rxData = spi_i2s_data_receive( SPI0 );
+    }
+    else
+    {
+        int i;
+        for ( i = 0; i < 8; i++ )
+        {
+            rxData <<= 1;
+            if ( outData & 0x80 )
+                GPIO_BOP( MOSI_GPIO_PORT ) = MOSI_PIN;
+            else
+                GPIO_BC( MOSI_GPIO_PORT ) = MOSI_PIN;
 
-        outData<<=1;
-       
+            GPIO_BC( SCK_GPIO_PORT ) = SCK_PIN;
+            spi_clock_delay();
+            GPIO_BOP( SCK_GPIO_PORT ) = SCK_PIN;
+            if ( gpio_input_bit_get( MISO_GPIO_PORT, MISO_PIN ) )
+                rxData |= 0x01;
+            spi_clock_delay();
 
+            outData <<= 1;
+        }
     }
 
     return( rxData );

@@ -1,6 +1,7 @@
 #ifndef __GD32F303RCT6__BOARD__H__
 #define __GD32F303RCT6__BOARD__H__
 #include "gd32f30x.h"
+#include <stdbool.h>
 #include "sx126x-board.h"
 
 typedef enum{
@@ -95,6 +96,9 @@ void Gpio_Init(void);
 void Spi_Init(void);
 void soft_spi_init(void);
 void Usart_Init(void);
+
+void Board_SetSpiMode(bool use_hw_spi);
+bool Board_GetSpiMode(void);
 
 void LED_On(GPIO_Index_TYPE led);
 void LED_Off(GPIO_Index_TYPE led);

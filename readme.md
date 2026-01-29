@@ -1,3 +1,46 @@
+## Recommended Macro Presets (CW/TX/RX)
+Set these macros in `project/main.c`:
+
+### CW (continuous wave)
+```
+#define APP_MODE                                APP_MODE_TX_CW
+#define APP_RF_FREQUENCY_HZ                     471000000UL
+#define APP_TX_POWER_DBM                        17
+#define APP_DIO2_AS_RF_SWITCH                    1
+#define APP_DIO3_AS_TCXO_CTRL                    0
+```
+
+### TX packet
+```
+#define APP_MODE                                APP_MODE_TX_PACKET
+#define APP_RF_FREQUENCY_HZ                     471000000UL
+#define APP_TX_POWER_DBM                        17
+#define APP_LORA_BANDWIDTH                      0
+#define APP_LORA_SPREADING_FACTOR               7
+#define APP_LORA_CODINGRATE                     1
+#define APP_LORA_PREAMBLE_LENGTH                8
+#define APP_LORA_HEADER_EXPLICIT                1
+#define APP_LORA_PACKET_FIXED_LEN               0
+#define APP_LORA_CRC_ON                          1
+#define APP_DIO2_AS_RF_SWITCH                    1
+#define APP_DIO3_AS_TCXO_CTRL                    0
+```
+
+### RX packet
+```
+#define APP_MODE                                APP_MODE_RX_PACKET
+#define APP_RF_FREQUENCY_HZ                     471000000UL
+#define APP_LORA_BANDWIDTH                      0
+#define APP_LORA_SPREADING_FACTOR               7
+#define APP_LORA_CODINGRATE                     1
+#define APP_LORA_PREAMBLE_LENGTH                8
+#define APP_LORA_HEADER_EXPLICIT                1
+#define APP_LORA_PACKET_FIXED_LEN               0
+#define APP_LORA_CRC_ON                          1
+#define APP_DIO2_AS_RF_SWITCH                    1
+#define APP_DIO3_AS_TCXO_CTRL                    0
+```
+
 ## 2025/09/23
 1. add 5 funciton: tx_by_pa_sw_config();tx_bypass_pa_sw_config();rx_sw_config();sleep_sw_config(); por_sw_config();
 ~~~
