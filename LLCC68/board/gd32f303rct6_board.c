@@ -231,7 +231,7 @@ void EXTI10_15_IRQHandler()
     if(RESET != exti_interrupt_flag_get(USER_KEY_EXTI_LINE)) {
        // gd_eval_led_toggle(LED3);
         //printf("user key press\n");
-        user_pressed=1;
+        //user_pressed=1;
         exti_interrupt_flag_clear(USER_KEY_EXTI_LINE);
     }
 

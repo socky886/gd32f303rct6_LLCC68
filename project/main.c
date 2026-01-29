@@ -18,15 +18,18 @@
 #include "main.h"
 
 /* ========================== USER CONFIG ========================== */
-#define APP_USE_HW_SPI                         0
+#define APP_USE_HW_SPI                         1
 
 #define APP_MODE_TX_PACKET                      0
 #define APP_MODE_RX_PACKET                      1
 #define APP_MODE_TX_CW                          2
-#define APP_MODE                                APP_MODE_TX_PACKET
+#define APP_MODE                                APP_MODE_RX_PACKET
 
-#define APP_RF_FREQUENCY_HZ                     471000000UL
-#define APP_TX_POWER_DBM                        17
+// #define APP_RF_FREQUENCY_HZ                     471000000UL
+// #define APP_TX_POWER_DBM                        17
+
+#define APP_RF_FREQUENCY_HZ                     915000000UL
+#define APP_TX_POWER_DBM                        22
 
 #define APP_LORA_BANDWIDTH                      0   /* 0:125kHz, 1:250kHz, 2:500kHz */
 #define APP_LORA_SPREADING_FACTOR               7   /* SF7..SF12 */
@@ -34,13 +37,15 @@
 #define APP_LORA_PREAMBLE_LENGTH                8
 
 #define APP_LORA_HEADER_EXPLICIT                1   /* 1: explicit, 0: implicit */
-#define APP_LORA_PACKET_FIXED_LEN               0   /* 1: fixed, 0: variable (same as header type) */
+#define APP_LORA_PACKET_FIXED_LEN               !APP_LORA_HEADER_EXPLICIT
+//#define APP_LORA_PACKET_FIXED_LEN               0   /* 1: fixed, 0: variable (same as header type) */
 #define APP_LORA_CRC_ON                          1   /* 1: enable, 0: disable */
 #define APP_LORA_IQ_INVERT                       0
 #define APP_LORA_PAYLOAD_LEN                     16  /* used when fixed length */
 
 #define APP_RX_TIMEOUT_MS                       1000
-#define APP_TX_REPEAT_MS                        1000
+//#define APP_TX_REPEAT_MS                        1000
+#define APP_TX_REPEAT_MS                        0
 #define APP_CW_TIME_SEC                          0xFFFF
 
 #define APP_DIO2_AS_RF_SWITCH                    1
@@ -94,7 +99,7 @@ int main( void )
            APP_LORA_SPREADING_FACTOR, APP_LORA_BANDWIDTH, APP_LORA_CODINGRATE);
 
     SX126xReset();
-    por_sw_config();
+    //por_sw_config();
     register_test();
 
     App_RadioInit();
@@ -241,7 +246,7 @@ static void App_SendPacket( void )
         Buffer[i] = (uint8_t)( 'A' + ( i % 26 ) );
     }
 #else
-    const char *msg = "PING";
+    const char *msg = "GD32F303RCT6 LLCC68 LoRa Demo";
     BufferSize = (uint16_t)strlen( msg );
     memcpy( Buffer, msg, BufferSize );
 #endif
@@ -270,7 +275,8 @@ static void App_StartTxCw( void )
 
 static void OnTxDone( void )
 {
-    printf("TX done\n");
+    // printf("TX done\n");
+    printf("tx packet successfully\n");
     Radio.Standby();
     g_tx_in_progress = false;
     g_tx_delay_ms = APP_TX_REPEAT_MS;
@@ -284,10 +290,15 @@ static void OnRxDone( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr 
     BufferSize = size;
     memcpy( Buffer, payload, BufferSize );
 
+    // compentation for sx126x rssi value
+    if(snr<0)
+    rssi+=snr;
+
     printf("RX done: RSSI=%d, SNR=%d, len=%u\n", rssi, snr, size );
     for ( i = 0; i < BufferSize; i++ )
     {
-        printf("%02X ", Buffer[i] );
+        // printf("%02X ", Buffer[i] );
+        printf("%c", Buffer[i] );
     }
     printf("\n");
 

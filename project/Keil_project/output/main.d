@@ -1,8 +1,9 @@
 ./output/main.o: ..\main.c \
   D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\string.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
   ..\..\LLCC68\src\radio\radio.h \
-  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h \
-  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h ..\systick.h \
+  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdint.h ..\systick.h \
   ..\..\LLCC68\board\gd32f303rct6_board.h \
   ..\..\Firmware\CMSIS\GD\GD32F30x\Include\gd32f30x.h \
   ..\..\Firmware\CMSIS\core_cm4.h ..\..\Firmware\CMSIS\core_cmInstr.h \
@@ -39,5 +40,4 @@
   D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
   ..\..\LLCC68\board\gd32f303rct6_gpio.h \
   ..\..\LLCC68\board\gd32f303rct6_spi.h \
-  D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdio.h ..\main.h \
-  ..\..\LLCC68\board\gd32f303rct6_delay.h
+  ..\..\LLCC68\board\gd32f303rct6_delay.h ..\main.h

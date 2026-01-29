@@ -32,8 +32,8 @@
   ..\..\Firmware\GD32F30x_standard_peripheral\Include\gd32f30x_enet.h \
   ..\..\Firmware\GD32F30x_standard_peripheral\Include\gd32f30x_exmc.h \
   ..\..\LLCC68\board\gd32f303rct6_board.h \
-  ..\..\LLCC68\board\sx126x-board.h \
   D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\stdbool.h \
+  ..\..\LLCC68\board\sx126x-board.h \
   ..\..\LLCC68\src\radio\sx126x\sx126x.h \
   D:\Keil_v5\ARM\ARMCLANG\Bin\..\include\math.h \
   ..\..\LLCC68\src\radio\radio.h ..\..\LLCC68\board\gd32f303rct6_gpio.h \

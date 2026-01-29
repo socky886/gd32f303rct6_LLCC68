@@ -40,7 +40,7 @@ OF SUCH DAMAGE.
 #include "systick.h"
 #include <stdio.h>
 
-extern States_t State;
+//extern States_t State;
 /*!
     \brief      this function handles NMI exception
     \param[in]  none
@@ -160,7 +160,7 @@ void RTC_IRQHandler(void)
         /* enable time update */
         //timedisplay = 1;
         printf("timeout\n");
-        State=S_CAD;
+        //State=S_CAD;
         //rtc_set_alarm(2048);
 
 

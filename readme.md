@@ -1,3 +1,5 @@
+## 2026/01/29 15:39 update
+1. all function has been tested, all work normal
 ## Recommended Macro Presets (CW/TX/RX)
 Set these macros in `project/main.c`:
 
